@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var convertUnit: UnitLength = .meters
     @State private var toUnit: UnitLength = .feet
     @State private var convertLength: Double = 0.0
+    @FocusState private var convertUnitIsFocused: Bool
     
     private var toLength: Measurement<UnitLength> {
         let inputValue = Measurement(value: convertLength, unit: convertUnit)
@@ -39,6 +40,8 @@ struct ContentView: View {
                         }
                     }
                     TextField("Input", value: $convertLength, format: .number)
+                        .keyboardType(.decimalPad)
+                        .focused($convertUnitIsFocused)
                 }
                 
                 Section {
@@ -51,6 +54,15 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Length Conversion")
+            .toolbar {
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    
+                    Button("Done") {
+                        convertUnitIsFocused = false
+                    }
+                }
+            }
         }
     }
 }
